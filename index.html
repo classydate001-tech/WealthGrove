@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthGrove | Automated investing & financial planning</title>
+<meta name="description" content="WealthGrove helps you grow your money with automated investing, goal-based portfolios, and low fees. Built for UK and US investors.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A1F44;--navy-deep:#061530;--teal:#00B39F;--teal-dark:#009685;
+  --teal-light:#E6F7F4;--cream:#FAF8F3;--white:#FFFFFF;--text:#1A2332;
+  --text-muted:#5A6478;--border:#E4E7EC;--success:#12B76A;
+  --shadow:0 4px 24px rgba(10,31,68,0.08);--shadow-lg:0 12px 48px rgba(10,31,68,0.12);
+  --radius:16px;--max-w:1200px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+button{font-family:inherit}
+.container{max-width:var(--max-w);margin:0 auto;padding:0 24px}
+
+/* ===== COURTESY NAV ===== */
+.courtesy{background:var(--navy-deep);color:rgba(255,255,255,0.7);font-size:13px}
+.courtesy-inner{display:flex;align-items:center;justify-content:space-between;height:40px}
+.courtesy-links{display:flex;gap:24px}
+.courtesy-links a{transition:color .2s}
+.courtesy-links a:hover,.courtesy-links a.active{color:#fff}
+.courtesy-links a.active{font-weight:600}
+
+/* ===== MAIN NAV ===== */
+.nav{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,0.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;color:var(--navy);flex-shrink:0}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800}
+.nav-menu{display:flex;gap:4px;align-items:center;flex:1;justify-content:center}
+.nav-item{position:relative}
+.nav-trigger{display:flex;align-items:center;gap:4px;background:none;border:none;padding:10px 16px;font-size:15px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:8px;transition:all .2s}
+.nav-trigger:hover{color:var(--navy);background:var(--cream)}
+.nav-trigger svg{transition:transform .2s}
+.nav-item.open .nav-trigger svg{transform:rotate(180deg)}
+.nav-trigger.active{color:var(--navy);font-weight:600}
+
+/* Mega menu */
+.mega{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-8px);background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:28px;opacity:0;visibility:hidden;transition:all .2s;min-width:720px;z-index:1001}
+.nav-item.open .mega{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.mega-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.mega-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:12px}
+.mega-link{display:block;padding:10px 12px;border-radius:8px;transition:all .2s;margin:-4px -12px}
+.mega-link:hover{background:var(--cream)}
+.mega-link-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.mega-pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;padding:2px 8px;border-radius:100px;background:var(--teal-light);color:var(--teal-dark)}
+.mega-link-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+.mega-callout{margin-top:20px;padding:16px;background:var(--cream);border-radius:12px}
+.mega-callout p{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.mega-callout a{font-size:13px;font-weight:600;color:var(--teal-dark);text-decoration:underline}
+
+.nav-cta{display:flex;gap:12px;align-items:center;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border-radius:100px;font-weight:600;font-size:15px;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-deep);transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn-lg{padding:16px 32px;font-size:16px}
+.mobile-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--navy)}
+
+/* ===== HERO CAROUSEL ===== */
+.hero{position:relative;background:linear-gradient(180deg,#E8F4F8 0%,var(--cream) 100%);overflow:hidden}
+.hero-slides{position:relative;min-height:560px}
+.hero-slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease;display:flex;align-items:center}
+.hero-slide.active{opacity:1;visibility:visible;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;padding:80px 0}
+.hero-content h1{font-size:56px;font-weight:800;line-height:1.1;color:var(--navy);letter-spacing:-0.03em;margin-bottom:24px}
+.hero-content h1 .accent{color:var(--teal)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--teal-light);color:var(--teal-dark);padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600;margin-bottom:20px}
+.hero-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.hero-lede{font-size:19px;color:var(--text-muted);margin-bottom:28px;max-width:520px}
+.hero-bullets{list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px}
+.hero-bullets li{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--text);font-weight:500}
+.hero-bullets .check{color:var(--success);font-weight:700;flex-shrink:0}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-disclosure{font-size:12px;color:var(--text-muted);margin-top:20px}
+
+/* Hero visual card */
+.hero-visual{position:relative}
+.portfolio-card{background:#fff;border-radius:24px;padding:32px;box-shadow:var(--shadow-lg);border:1px solid var(--border);position:relative;z-index:2}
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.pc-label{font-size:13px;color:var(--text-muted);font-weight:500}
+.pc-badge{background:var(--teal-light);color:var(--teal-dark);padding:4px 10px;border-radius:100px;font-size:12px;font-weight:600}
+.pc-value{font-size:38px;font-weight:800;color:var(--navy);letter-spacing:-0.02em;margin-bottom:4px}
+.pc-change{font-size:14px;color:var(--success);font-weight:600;margin-bottom:24px}
+.pc-chart{height:120px;margin-bottom:24px}
+.pc-chart svg{width:100%;height:100%}
+.pc-goals{display:flex;flex-direction:column;gap:12px}
+.pc-goal{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--cream)}
+.pc-goal-icon{width:36px;height:36px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(10,31,68,0.06)}
+.pc-goal-info{flex:1}
+.pc-goal-name{font-size:14px;font-weight:600;color:var(--navy)}
+.pc-goal-amt{font-size:12px;color:var(--text-muted)}
+.pc-goal-bar{width:60px;height:6px;border-radius:100px;background:var(--border);overflow:hidden}
+.pc-goal-bar div{height:100%;background:var(--teal);border-radius:100px}
+.float-badge{position:absolute;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--navy);z-index:3}
+.fb-1{top:-16px;right:-16px}
+.fb-2{bottom:-16px;left:-16px}
+.fb-dot{width:8px;height:8px;border-radius:50%;background:var(--success)}
+
+/* APY card slide */
+.apy-card{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-dark) 100%);color:#fff;border-radius:24px;padding:48px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;z-index:2}
+.apy-num{font-size:80px;font-weight:800;line-height:1;letter-spacing:-0.04em}
+.apy-suffix{font-size:32px;font-weight:700;vertical-align:top;margin-left:4px}
+.apy-label{font-size:14px;opacity:0.7;margin-top:8px}
+.apy-note{font-size:13px;opacity:0.6;margin-top:16px;max-width:280px;margin-left:auto;margin-right:auto}
+
+/* Hero controls */
+.hero-controls{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:10;background:rgba(255,255,255,0.9);padding:8px 16px;border-radius:100px;box-shadow:var(--shadow)}
+.hero-dot{width:8px;height:8px;border-radius:50%;background:var(--border);border:none;cursor:pointer;padding:0;transition:all .3s}
+.hero-dot.active{width:32px;border-radius:100px;background:var(--navy)}
+.hero-pause{background:none;border:none;cursor:pointer;color:var(--navy);padding:4px;display:flex;align-items:center}
+
+/* ===== SECTION COMMON ===== */
+section{padding:96px 0}
+.section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+.section-head h2{font-size:40px;font-weight:800;color:var(--navy);letter-spacing:-0.02em;line-height:1.15;margin-bottom:16px}
+.section-head p{font-size:18px;color:var(--text-muted)}
+.section-tag{display:inline-block;color:var(--teal-dark);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+
+/* ===== PRODUCT LINKS GRID ===== */
+.product-links{background:var(--white)}
+.pl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px}
+.pl-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.pl-list{list-style:none}
+.pl-row{display:flex;align-items:center;gap:14px;padding:16px 12px;border-radius:12px;transition:all .2s;margin:0 -12px}
+.pl-row:hover{background:var(--cream);transform:translateX(4px)}
+.pl-tile{width:44px;height:44px;border-radius:12px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pl-text{flex:1;min-width:0}
+.pl-title-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.pl-title{font-size:15px;font-weight:600;color:var(--navy)}
+.pl-pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;padding:2px 8px;border-radius:100px;background:var(--teal-light);color:var(--teal-dark)}
+.pl-subtitle{font-size:13px;color:var(--text-muted)}
+.pl-arrow{color:var(--text-muted);font-size:16px;transition:all .2s}
+.pl-row:hover .pl-arrow{color:var(--teal-dark);transform:translate(2px,-2px)}
+
+/* ===== PLAN CARDS ===== */
+.plan-cards{background:var(--cream)}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.plan-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:36px 28px;transition:all .25s;position:relative;display:flex;flex-direction:column}
+.plan-card:hover{border-color:var(--teal);box-shadow:var(--shadow-lg);transform:translateY(-4px)}
+.plan-card.featured{border-color:var(--teal);background:linear-gradient(180deg,var(--teal-light) 0%,#fff 40%)}
+.plan-card.featured::before{content:"Most popular";position:absolute;top:-12px;left:28px;background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:100px}
+.plan-icon{width:52px;height:52px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:#fff;font-size:24px}
+.plan-card.featured .plan-icon{background:var(--teal)}
+.plan-card h3{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.plan-card p{font-size:15px;color:var(--text-muted);margin-bottom:20px;flex:1}
+.plan-features{list-style:none;margin-bottom:28px}
+.plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);margin-bottom:10px}
+.plan-features li::before{content:"✓";color:var(--teal);font-weight:700;flex-shrink:0}
+.plan-fee{padding-top:20px;border-top:1px solid var(--border);font-size:14px;color:var(--text-muted);margin-bottom:20px}
+.plan-fee strong{color:var(--navy);font-size:20px;display:block;margin-bottom:2px}
+.plan-card .btn{width:100%}
+
+/* ===== RETIREMENT SECTION ===== */
+.retirement{background:#fff}
+.retirement-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.retirement-content h2{font-size:40px;font-weight:800;color:var(--navy);letter-spacing:-0.02em;line-height:1.15;margin-bottom:16px}
+.retirement-content p{font-size:17px;color:var(--text-muted);margin-bottom:28px}
+.retirement-list{list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:16px}
+.retirement-list li{display:flex;gap:14px;align-items:flex-start}
+.retirement-list .ri{width:36px;height:36px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-dark);font-weight:700}
+.retirement-list .rt{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.retirement-list .rd{font-size:14px;color:var(--text-muted)}
+.retirement-visual{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-dark) 100%);border-radius:24px;padding:40px;color:#fff;box-shadow:var(--shadow-lg)}
+.rv-label{font-size:13px;opacity:0.7;margin-bottom:8px}
+.rv-value{font-size:48px;font-weight:800;letter-spacing:-0.03em;margin-bottom:24px}
+.rv-progress{height:10px;background:rgba(255,255,255,0.15);border-radius:100px;overflow:hidden;margin-bottom:12px}
+.rv-progress div{height:100%;background:#fff;border-radius:100px;width:64%}
+.rv-meta{display:flex;justify-content:space-between;font-size:13px;opacity:0.7}
+.rv-detail{margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.15)}
+.rv-row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0}
+.rv-row span:last-child{font-weight:600}
+
+/* ===== CASH/APY SECTION ===== */
+.cash{background:var(--navy);color:#fff}
+.cash .section-head h2{color:#fff}
+.cash .section-head p{color:rgba(255,255,255,0.7)}
+.cash .section-tag{color:var(--teal)}
+.cash-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.cash-visual{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:48px 40px;text-align:center}
+.cash-apy{font-size:72px;font-weight:800;letter-spacing:-0.04em;color:var(--teal);line-height:1}
+.cash-apy-suffix{font-size:24px;font-weight:700;vertical-align:top;margin-left:4px;color:var(--teal)}
+.cash-apy-label{font-size:14px;color:rgba(255,255,255,0.6);margin-top:8px;margin-bottom:24px}
+.cash-badge{display:inline-block;background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;text-transform:uppercase;letter-spacing:0.04em}
+.cash-content h2{font-size:36px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:16px}
+.cash-content p{font-size:17px;color:rgba(255,255,255,0.75);margin-bottom:24px}
+.cash-features{list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:12px}
+.cash-features li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:rgba(255,255,255,0.9)}
+.cash-features .check{color:var(--teal);font-weight:700;flex-shrink:0}
+
+/* ===== TRUST ===== */
+.trust{background:var(--cream)}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:48px}
+.trust-card{background:#fff;border-radius:var(--radius);padding:32px 24px;text-align:center;border:1px solid var(--border)}
+.trust-num{font-size:38px;font-weight:800;color:var(--navy);letter-spacing:-0.02em}
+.trust-num .accent{color:var(--teal)}
+.trust-label{font-size:14px;color:var(--text-muted);margin-top:6px}
+.trust-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pillar{background:#fff;border-radius:var(--radius);padding:28px;border:1px solid var(--border)}
+.pillar-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;color:var(--teal-dark)}
+.pillar h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.pillar p{font-size:14px;color:var(--text-muted);line-height:1.6}
+
+/* ===== FAQ ===== */
+.faq{background:#fff}
+.faq-list{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .2s}
+.faq-item:hover{border-color:var(--teal)}
+.faq-q{width:100%;background:none;border:none;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600;color:var(--navy);cursor:pointer;text-align:left}
+.faq-icon{width:28px;height:28px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;font-size:16px;font-weight:700;color:var(--navy)}
+.faq-item.open .faq-icon{background:var(--teal);color:#fff;transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 24px}
+.faq-item.open .faq-a{max-height:400px;padding:0 24px 24px}
+.faq-a p{font-size:15px;color:var(--text-muted);line-height:1.7}
+
+/* ===== FINAL CTA ===== */
+.cta-banner{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-dark) 100%);border-radius:24px;padding:64px 48px;text-align:center;color:#fff;margin:0 24px}
+.cta-banner h2{font-size:38px;font-weight:800;letter-spacing:-0.02em;margin-bottom:16px}
+.cta-banner p{font-size:18px;color:rgba(255,255,255,0.85);margin-bottom:32px;max-width:560px;margin-left:auto;margin-right:auto}
+.cta-banner .btn-teal{background:#fff;color:var(--navy)}
+.cta-banner .btn-teal:hover{background:var(--teal-light)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--navy-deep);color:rgba(255,255,255,0.7);padding:64px 0 32px;font-size:14px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer-brand .logo{color:#fff;margin-bottom:16px}
+.footer-brand p{font-size:14px;line-height:1.7;max-width:300px}
+.footer-col h4{color:#fff;font-size:13px;font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.06em}
+.footer-col a{display:block;margin-bottom:10px;transition:color .2s;font-size:14px}
+.footer-col a:hover{color:var(--teal)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:28px;font-size:12px;line-height:1.7;color:rgba(255,255,255,0.5)}
+.footer-bottom p{margin-bottom:12px}
+.footer-bottom strong{color:rgba(255,255,255,0.7)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1074px){
+  .nav-menu{display:none}
+  .mobile-toggle{display:block}
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-content h1{font-size:44px}
+  .pl-grid{grid-template-columns:1fr 1fr}
+  .retirement-grid,.cash-grid{grid-template-columns:1fr;gap:40px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .courtesy-links{gap:16px;font-size:12px}
+  .courtesy-links a:nth-child(2),.courtesy-links a:nth-child(3){display:none}
+  section{padding:64px 0}
+  .hero-grid{padding:48px 0}
+  .hero-content h1{font-size:34px}
+  .hero-lede{font-size:17px}
+  .section-head h2{font-size:30px}
+  .retirement-content h2,.cash-content h2{font-size:28px}
+  .plan-grid,.trust-grid,.trust-pillars{grid-template-columns:1fr}
+  .pl-grid{grid-template-columns:1fr}
+  .cta-banner{padding:48px 24px;margin:0 16px}
+  .cta-banner h2{font-size:28px}
+  .nav-cta .btn-ghost{display:none}
+  .footer-grid{grid-template-columns:1fr}
+  .apy-num,.cash-apy{font-size:56px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== COURTESY NAV ===== -->
+<div class="courtesy">
+  <div class="container courtesy-inner">
+    <div class="courtesy-links">
+      <a href="#" class="active">Individuals</a>
+      <a href="#">Employers</a>
+      <a href="#">Advisors</a>
+    </div>
+    <div class="courtesy-links">
+      <a href="#">Support</a>
+      <a href="#">Log in</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN NAV ===== -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><span class="logo-mark">W</span> WealthGrove</a>
+    <div class="nav-menu">
+      <div class="nav-item" data-menu="invest">
+        <button class="nav-trigger active">Invest <svg width="16" height="16" viewBox="0 0 20 20"><path d="M10.5 12.5L6.7 8.7l.9-.9 3 3 3-3 .9.9-4 4z" fill="currentColor"/></svg></button>
+        <div class="mega">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h4>Invest</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Automated investing <span class="mega-pill">Popular</span></div><div class="mega-link-desc">We build and manage a diversified portfolio for you.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Self-directed investing</div><div class="mega-link-desc">Pick your own ETFs with tax insights.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Custom portfolios <span class="mega-pill">New</span></div><div class="mega-link-desc">Design your allocation. We automate the rest.</div></a>
+            </div>
+            <div class="mega-col">
+              <h4>Tools</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Portfolio options</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Historical performance</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Tax-saving technology</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Work with an advisor</div></a>
+            </div>
+            <div class="mega-col">
+              <h4>Offers</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Earn up to $2,000</div><div class="mega-link-desc">Open an account and make a deposit.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Refer a friend</div><div class="mega-link-desc">You both get a boost.</div></a>
+              <div class="mega-callout">
+                <p>Start investing with WealthGrove today.</p>
+                <a href="#">Claim offer →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item" data-menu="cash">
+        <button class="nav-trigger">Cash <svg width="16" height="16" viewBox="0 0 20 20"><path d="M10.5 12.5L6.7 8.7l.9-.9 3 3 3-3 .9.9-4 4z" fill="currentColor"/></svg></button>
+        <div class="mega">
+          <div class="mega-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="mega-col">
+              <h4>Cash</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">High-yield cash <span class="mega-pill">4.25% APY</span></div><div class="mega-link-desc">No fees. FDIC insured. Unlimited withdrawals.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Checking</div><div class="mega-link-desc">Everyday spending, no foreign transaction fees.</div></a>
+            </div>
+            <div class="mega-col">
+              <h4>Why cash</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Emergency fund</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Savings goals</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">FDIC insurance</div></a>
+            </div>
+            <div class="mega-col">
+              <div class="mega-callout">
+                <p>New customer offer: 4.25% APY</p>
+                <a href="#">Claim offer →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item" data-menu="retirement">
+        <button class="nav-trigger">Retirement <svg width="16" height="16" viewBox="0 0 20 20"><path d="M10.5 12.5L6.7 8.7l.9-.9 3 3 3-3 .9.9-4 4z" fill="currentColor"/></svg></button>
+        <div class="mega">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h4>Retirement</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Retirement accounts</div><div class="mega-link-desc">Traditional, Roth, and SEP IRAs.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">401(k) and IRA rollovers</div><div class="mega-link-desc">White-glove support moving old accounts.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Retirement planning</div><div class="mega-link-desc">Insights to make smarter decisions.</div></a>
+            </div>
+            <div class="mega-col">
+              <h4>Self-employed</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Solo 401(k)s</div><div class="mega-link-desc">Higher contribution limits.</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">401(k) for business</div><div class="mega-link-desc">Scalable plans for employees.</div></a>
+            </div>
+            <div class="mega-col">
+              <div class="mega-callout">
+                <p>Start investing with WealthGrove today.</p>
+                <a href="#">Claim offer →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#fees" class="nav-trigger">Premium</a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <button class="nav-trigger">Resources <svg width="16" height="16" viewBox="0 0 20 20"><path d="M10.5 12.5L6.7 8.7l.9-.9 3 3 3-3 .9.9-4 4z" fill="currentColor"/></svg></button>
+        <div class="mega">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h4>Learn</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Education</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Support</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Customer reviews</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Understanding risk & return</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Pricing</div></a>
+            </div>
+            <div class="mega-col">
+              <h4>Company</h4>
+              <a href="#" class="mega-link"><div class="mega-link-title">Press</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">Careers</div></a>
+              <a href="#" class="mega-link"><div class="mega-link-title">About us</div></a>
+            </div>
+            <div class="mega-col">
+              <div class="mega-callout">
+                <p>The powerful potential of the tax swap</p>
+                <a href="#">Learn how →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Log in</a>
+      <a href="#" class="btn btn-primary">Get started</a>
+      <button class="mobile-toggle" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO CAROUSEL ===== -->
+<header class="hero">
+  <div class="hero-slides">
+    <!-- Slide 1 -->
+    <div class="hero-slide active">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="hero-eyebrow"><span class="dot"></span> Automated investing for UK & US</span>
+          <h1>Build wealth with <span class="accent">confidence and ease</span></h1>
+          <p class="hero-lede">Investing and saving shouldn't take over your life. WealthGrove automates the work for you.</p>
+          <ul class="hero-bullets">
+            <li><span class="check">✓</span> Invest the way you want</li>
+            <li><span class="check">✓</span> Helps you save on taxes</li>
+            <li><span class="check">✓</span> Trusted by 1M+ customers</li>
+          </ul>
+          <div class="hero-actions">
+            <a href="#" class="btn btn-teal btn-lg">Get started</a>
+            <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+          </div>
+          <p class="hero-disclosure">Image is illustrative.</p>
+        </div>
+        <div class="hero-visual">
+          <div class="portfolio-card">
+            <div class="pc-header">
+              <div>
+                <div class="pc-label">Your portfolio</div>
+                <div class="pc-value">$50,460.82</div>
+                <div class="pc-change">▲ +$3,842.10 (8.2%) this year</div>
+              </div>
+              <span class="pc-badge">Auto-invested</span>
+            </div>
+            <div class="pc-chart">
+              <svg viewBox="0 0 300 120" preserveAspectRatio="none">
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00B39F" stop-opacity="0.25"/><stop offset="100%" stop-color="#00B39F" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,90 C30,85 45,70 70,65 C95,60 110,75 135,55 C160,35 175,45 200,30 C225,15 250,25 275,12 L300,8 L300,120 L0,120 Z" fill="url(#g1)"/>
+                <path d="M0,90 C30,85 45,70 70,65 C95,60 110,75 135,55 C160,35 175,45 200,30 C225,15 250,25 275,12 L300,8" fill="none" stroke="#00B39F" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="pc-goals">
+              <div class="pc-goal"><div class="pc-goal-icon">🏠</div><div class="pc-goal-info"><div class="pc-goal-name">House deposit</div><div class="pc-goal-amt">$8,240 of $20,000</div></div><div class="pc-goal-bar"><div style="width:41%"></div></div></div>
+              <div class="pc-goal"><div class="pc-goal-icon">🎓</div><div class="pc-goal-info"><div class="pc-goal-name">Education fund</div><div class="pc-goal-amt">$4,240 of $15,000</div></div><div class="pc-goal-bar"><div style="width:28%"></div></div></div>
+            </div>
+          </div>
+          <div class="float-badge fb-1"><span class="fb-dot"></span> Rebalanced today</div>
+          <div class="float-badge fb-2"><span class="fb-dot"></span> Auto-deposit on</div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="hero-slide">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1>Invest and earn up to <span class="accent">$2,000</span> on us</h1>
+          <p class="hero-lede">Start investing now and let time do the work.</p>
+          <ul class="hero-bullets">
+            <li><span class="check">✓</span> Globally diversified investing</li>
+            <li><span class="check">✓</span> Built and managed for you</li>
+            <li><span class="check">✓</span> Keep more of what you earn with tax-saving tech</li>
+          </ul>
+          <div class="hero-actions">
+            <a href="#" class="btn btn-teal btn-lg">Activate offer</a>
+          </div>
+          <p class="hero-disclosure">Terms apply. Image is illustrative.</p>
+        </div>
+        <div class="hero-visual">
+          <div class="portfolio-card" style="text-align:center;padding:48px 32px">
+            <div style="font-size:56px;margin-bottom:16px">💰</div>
+            <div style="font-size:28px;font-weight:800;color:var(--navy);margin-bottom:8px">Up to $2,000</div>
+            <div style="font-size:15px;color:var(--text-muted)">New customer reward</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="hero-slide">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="hero-eyebrow"><span class="dot"></span> New customer offer</span>
+          <h1>Get a <span class="accent">0.75% APY boost</span> on your cash</h1>
+          <p class="hero-lede">Earn 11X more than the average bank account.</p>
+          <ul class="hero-bullets">
+            <li><span class="check">✓</span> Applies to cash balances up to $1M</li>
+            <li><span class="check">✓</span> Available through February 15</li>
+            <li><span class="check">✓</span> No fees or minimums</li>
+          </ul>
+          <div class="hero-actions">
+            <a href="#" class="btn btn-teal btn-lg">Activate offer</a>
+          </div>
+          <p class="hero-disclosure">Cash Reserve requires a WealthGrove brokerage account. FDIC insurance subject to conditions. Variable APY. Terms apply.</p>
+        </div>
+        <div class="hero-visual">
+          <div class="apy-card">
+            <div><span class="apy-num">4.25</span><span class="apy-suffix">%</span></div>
+            <div class="apy-label">APY (variable)</div>
+            <div class="apy-note">New customer offer. Earn 11X more than the average bank account.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-controls">
+    <button class="hero-pause" id="heroPause" aria-label="Pause slideshow">
+      <svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1" width="3" height="10" fill="currentColor"/><rect x="7" y="1" width="3" height="10" fill="currentColor"/></svg>
+    </button>
+    <button class="hero-dot active" data-slide="0"></button>
+    <button class="hero-dot" data-slide="1"></button>
+    <button class="hero-dot" data-slide="2"></button>
+  </div>
+</header>
+
+<!-- ===== PRODUCT LINKS GRID ===== -->
+<section class="product-links" id="products">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Get started in minutes</span>
+      <h2>Everything you need to grow your money.</h2>
+    </div>
+    <div class="pl-grid">
+      <div>
+        <h3 class="pl-col-title">Invest</h3>
+        <ul class="pl-list">
+          <li><a href="#" class="pl-row"><span class="pl-tile">⚙</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">Automated investing</span></span><span class="pl-subtitle">Build long-term wealth</span></span><span class="pl-arrow">↗</span></a></li>
+          <li><a href="#" class="pl-row"><span class="pl-tile">📈</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">Self-directed investing</span></span><span class="pl-subtitle">Pick your own investments</span></span><span class="pl-arrow">↗</span></a></li>
+          <li><a href="#" class="pl-row"><span class="pl-tile">🎯</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">Custom portfolios</span><span class="pl-pill">New</span></span><span class="pl-subtitle">Design the portfolio you want</span></span><span class="pl-arrow">↗</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="pl-col-title">Cash</h3>
+        <ul class="pl-list">
+          <li><a href="#" class="pl-row"><span class="pl-tile">💵</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">High-yield cash</span><span class="pl-pill">4.25% APY</span></span><span class="pl-subtitle">Grow your savings (variable)</span></span><span class="pl-arrow">↗</span></a></li>
+          <li><a href="#" class="pl-row"><span class="pl-tile">💳</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">Checking</span></span><span class="pl-subtitle">Everyday spending</span></span><span class="pl-arrow">↗</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="pl-col-title">Retire</h3>
+        <ul class="pl-list">
+          <li><a href="#" class="pl-row"><span class="pl-tile">☂️</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">IRAs</span></span><span class="pl-subtitle">Traditional and Roth</span></span><span class="pl-arrow">↗</span></a></li>
+          <li><a href="#" class="pl-row"><span class="pl-tile">💼</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">Solo 401(k)</span></span><span class="pl-subtitle">Higher contribution for self-employed</span></span><span class="pl-arrow">↗</span></a></li>
+          <li><a href="#" class="pl-row"><span class="pl-tile">🏦</span><span class="pl-text"><span class="pl-title-row"><span class="pl-title">SEP IRA</span></span><span class="pl-subtitle">Easy administration for self-employed</span></span><span class="pl-arrow">↗</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLAN CARDS ===== -->
+<section class="plan-cards" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Invest the way you want</span>
+      <h2>Pick the path that fits you.</h2>
+      <p>Whether you want us to handle everything or just want a smarter platform, there's a WealthGrove account for you.</p>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-icon">📈</div>
+        <h3>Self-Directed</h3>
+        <p>You pick the ETFs. We give you the tools to trade commission-free.</p>
+        <ul class="plan-features">
+          <li>Commission-free ETF trades</li>
+          <li>Fractional shares</li>
+          <li>Real-time tax preview</li>
+          <li>Custom watchlists</li>
+        </ul>
+        <div class="plan-fee"><strong>$0</strong> management fee</div>
+        <a href="#" class="btn btn-ghost">Choose Self-Directed</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-icon">⚙</div>
+        <h3>Automated</h3>
+        <p>Answer a few questions. We build, invest, and rebalance a portfolio for you.</p>
+        <ul class="plan-features">
+          <li>Goal-based portfolios</li>
+          <li>Auto-rebalancing</li>
+          <li>Tax-loss harvesting</li>
+          <li>Dividend reinvestment</li>
+        </ul>
+        <div class="plan-fee"><strong>0.25%</strong> annual management fee</div>
+        <a href="#" class="btn btn-teal">Choose Automated</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-icon">🎯</div>
+        <h3>Custom</h3>
+        <p>You build the portfolio. We automate the maintenance, rebalancing, and tax logic.</p>
+        <ul class="plan-features">
+          <li>Your own allocations</li>
+          <li>Automated rebalancing</li>
+          <li>Tax-smart management</li>
+          <li>Priority support</li>
+        </ul>
+        <div class="plan-fee"><strong>0.40%</strong> annual management fee</div>
+        <a href="#" class="btn btn-ghost">Choose Custom</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RETIREMENT ===== -->
+<section class="retirement">
+  <div class="container">
+    <div class="retirement-grid">
+      <div class="retirement-content">
+        <span class="section-tag">Retirement</span>
+        <h2>Retirement accounts with a personalized tracker.</h2>
+        <p>Pick traditional or Roth IRAs for tax-advantaged retirement savings. Or opt for an even higher contribution limit with a Solo 401(k) or SEP IRA if you're self-employed.</p>
+        <ul class="retirement-list">
+          <li><span class="ri">1</span><div><div class="rt">Tax-advantaged accounts</div><div class="rd">Traditional, Roth, SEP IRA, and Solo 401(k) options.</div></div></li>
+          <li><span class="ri">2</span><div><div class="rt">Personalized tracker</div><div class="rd">See how much you need to save to hit your retirement goal.</div></div></li>
+          <li><span class="ri">3</span><div><div class="rt">White-glove rollovers</div><div class="rd">We handle the paperwork moving old 401(k)s and IRAs.</div></div></li>
+        </ul>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-teal">Get started</a>
+          <a href="#" class="btn btn-ghost">Learn more</a>
+        </div>
+      </div>
+      <div class="retirement-visual">
+        <div class="rv-label">Projected retirement balance</div>
+        <div class="rv-value">$842,000</div>
+        <div class="rv-progress"><div></div></div>
+        <div class="rv-meta"><span>$124,000 saved</span><span>Goal: $842,000</span></div>
+        <div class="rv-detail">
+          <div class="rv-row"><span>Monthly contribution</span><span>$500</span></div>
+          <div class="rv-row"><span>Years to retirement</span><span>28</span></div>
+          <div class="rv-row"><span>Expected annual return</span><span>6.5%</span></div>
+          <div class="rv-row"><span>Risk level</span><span>Moderate</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASH / APY ===== -->
+<section class="cash" id="fees">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Cash Reserve</span>
+      <h2>Your cash should work harder.</h2>
+      <p>Earn a competitive APY on your cash. Set money aside for what matters to you. Create multiple savings goals and earn 11x the national average.</p>
+    </div>
+    <div class="cash-grid">
+      <div class="cash-visual">
+        <div><span class="cash-apy">4.25</span><span class="cash-apy-suffix">%</span></div>
+        <div class="cash-apy-label">APY (variable)</div>
+        <span class="cash-badge">New customer offer</span>
+      </div>
+      <div class="cash-content">
+        <h2>Earn more on every dollar you save.</h2>
+        <p>No fees. No minimums. Eligible cash is FDIC-insured up to $8M (joint) and $4M (individual) at program banks, subject to certain conditions.</p>
+        <ul class="cash-features">
+          <li><span class="check">✓</span> Earn more on every dollar you save</li>
+          <li><span class="check">✓</span> Build your emergency fund or save toward a goal</li>
+          <li><span class="check">✓</span> No fees or minimums</li>
+          <li><span class="check">✓</span> FDIC-insured up to $8M (joint)</li>
+        </ul>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-teal">Get started</a>
+          <a href="#" class="btn btn-ghost" style="border-color:rgba(255,255,255,0.3);color:#fff">Learn more</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST ===== -->
+<section class="trust" id="trust">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Why WealthGrove</span>
+      <h2>Your money's protected and your interests come first.</h2>
+      <p>We're a fiduciary. That means we're legally required to act in your interest.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-num"><span class="accent">$70B+</span></div><div class="trust-label">Assets under management</div></div>
+      <div class="trust-card"><div class="trust-num">1M+</div><div class="trust-label">Customers trust us</div></div>
+      <div class="trust-card"><div class="trust-num"><span class="accent">$10</span></div><div class="trust-label">To get started</div></div>
+      <div class="trust-card"><div class="trust-num">4.8<span style="font-size:20px">★</span></div><div class="trust-label">From 78K+ app reviews</div></div>
+    </div>
+    <div class="trust-pillars">
+      <div class="pillar"><div class="pillar-icon">🛡</div><h3>We're a fiduciary</h3><p>WealthGrove is a registered investment adviser, legally required to act in your interest.</p></div>
+      <div class="pillar"><div class="pillar-icon">🔒</div><h3>SIPC protection up to $500K</h3><p>Member of SIPC, which protects securities customers of its members up to $500,000.</p></div>
+      <div class="pillar"><div class="pillar-icon">👥</div><h3>Technology backed by experts</h3><p>CFP® professionals and portfolio specialists monitor, analyze, and adjust your investments.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Common questions</span>
+      <h2>Real answers.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">How does WealthGrove work?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>WealthGrove helps you manage your money through cash management, guided investing, and retirement planning. We are a fiduciary, which means we act in your best interest. We'll ask a bit about you when you sign up, then help you set financial goals and set you up with investment portfolios for each goal.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Will I have access to real humans?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Yes. Our support team is available via chat and email, and Premium clients get access to CFP® professionals for personalized advice on retirement, tax, and estate planning.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is my money safe at WealthGrove?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Your securities are protected by SIPC up to $500,000 (including $250,000 for cash claims). Cash held in Cash Reserve is FDIC-insured up to $8M (joint) or $4M (individual) at program banks, subject to conditions.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Who are the experts behind the scenes?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Our team includes behavioral finance experts, CFP® professionals, and portfolio specialists who monitor, analyze, and adjust your investments to help strengthen your returns.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section style="padding:0 0 96px">
+  <div class="cta-banner">
+    <h2>Ready to start building wealth?</h2>
+    <p>No minimums. No hidden fees. No jargon. Just a smarter way to invest for the things that matter.</p>
+    <a href="#" class="btn btn-teal btn-lg">Get started</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo"><span class="logo-mark">W</span> WealthGrove</a>
+        <p>Automated investing and financial planning for UK and US investors. Built with transparency, low fees, and long-term growth in mind.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Accounts</h4>
+        <a href="#">Automated investing</a>
+        <a href="#">Self-directed investing</a>
+        <a href="#">High-yield cash</a>
+        <a href="#">IRAs</a>
+        <a href="#">Checking</a>
+        <a href="#">Trusts</a>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <a href="#">Portfolio options</a>
+        <a href="#">Custom portfolios</a>
+        <a href="#">Historical performance</a>
+        <a href="#">Tax savings</a>
+        <a href="#">Mobile app</a>
+        <a href="#">Goal tracker</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Education</a>
+        <a href="#">Compare WealthGrove</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+        <a href="#">Risk and return</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="#">About us</a>
+        <a href="#">Reviews</a>
+        <a href="#">Press</a>
+        <a href="#">Careers</a>
+        <a href="#">Legal</a>
+        <a href="#">Disclosures</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p><strong>Risk warning:</strong> Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The value of your investments can go down as well as up, and you may get back less than you invested.</p>
+      <p><strong>Regulatory notice:</strong> WealthGrove is a demonstration platform. Before launching to the public in the UK or US, this website must be operated by a firm authorised by the Financial Conduct Authority (FCA) in the UK and/or registered with the Securities and Exchange Commission (SEC) in the US. Do not accept real client funds until regulatory authorisation is in place.</p>
+      <p><strong>Disclosures:</strong> WealthGrove does not provide tax advice. Tax-loss harvesting is not suitable for all investors. Cash Reserve is offered by WealthGrove LLC and requires a WealthGrove Securities brokerage account. WealthGrove is not a bank. FDIC insurance provided by Program Banks, subject to certain conditions. Annual percentage yield (variable) is subject to change.</p>
+      <p>© 2026 WealthGrove. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== MEGA MENU =====
+document.querySelectorAll('.nav-item[data-menu]').forEach(item => {
+  const trigger = item.querySelector('.nav-trigger');
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'));
+});
+document.querySelectorAll('.mega').forEach(m => m.addEventListener('click', e => e.stopPropagation()));
+
+// ===== HERO CAROUSEL =====
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hero-dot');
+const pauseBtn = document.getElementById('heroPause');
+let current = 0;
+let autoplay = true;
+let timer;
+
+function goTo(i) {
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  current = i;
+}
+
+function next() {
+  goTo((current + 1) % slides.length);
+}
+
+function startAutoplay() {
+  if (timer) clearInterval(timer);
+  if (autoplay) timer = setInterval(next, 6000);
+}
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    goTo(parseInt(dot.dataset.slide));
+    startAutoplay();
+  });
+});
+
+pauseBtn.addEventListener('click', () => {
+  autoplay = !autoplay;
+  pauseBtn.innerHTML = autoplay
+    ? '<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1" width="3" height="10" fill="currentColor"/><rect x="7" y="1" width="3" height="10" fill="currentColor"/></svg>'
+    : '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 1.2a1 1 0 0 1 1.52-.86l7.06 4.3a1 1 0 0 1 0 1.71l-7.06 4.3a1 1 0 0 1-1.52-.85V1.2Z" fill="currentColor"/></svg>';
+  startAutoplay();
+});
+
+startAutoplay();
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
